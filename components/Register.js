@@ -1,6 +1,11 @@
 import React,{ useState } from 'react';
+import axios from 'axios';
 import { StyleSheet, View, Text,TextInput,Button,Alert ,TouchableOpacity, Image,ScrollView,} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+// const cors = require('cors');
+// app.use(cors());
+
+
 
 
 
@@ -52,38 +57,80 @@ export default function Register({navigation}) {
     }
   };
 
-  const submitsDetails = async ()=>{
-    // console.log(username)
+  // const submitsDetails = async ()=>{
+  //   // console.log(username)
     
-    try {
-      const response = await fetch('https:// 192.168.90.61:5000/app/user', {
-        method: 'POST',
+  //   try {
+  //     const response = await fetch('http://192.168.90.61:8080/app/user', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         user_name: username,
+  //       }),
+  //     });
+  
+  //     // Check if the response is ok (status code 200-299)
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  
+  //     // Parse the JSON response
+  //     const data = await response.json();
+  
+  //     console.log('Posted data:', data);
+  
+  //     // // Clear the form (if needed)
+  //     // setTitle('');
+  //     // setBody('');
+  //   } catch (error) {
+  //     console.info(error)
+  //     console.error('Error posting data:', error);
+  //   }
+  // }
+
+  // import axios from 'axios';
+
+const submitsDetails = async () => {
+  try {
+    const response = await axios.post(
+      'http://192.168.90.61:5000/app',
+      {
+        user_name: username, // Payload
+        phone: phone,
+        password: password,
+        email: email  
+      },
+      {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Headers
         },
-        body: JSON.stringify({
-          user_name: username,
-        }),
-      });
-  
-      // Check if the response is ok (status code 200-299)
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
-      // Parse the JSON response
-      const data = await response.json();
-  
-      console.log('Posted data:', data);
-  
-      // Clear the form (if needed)
-      setTitle('');
-      setBody('');
-    } catch (error) {
-      console.info(error)
-      console.error('Error posting data:', error);
+    );
+
+    // Axios automatically throws an error for HTTP status codes outside 200-299
+    console.log('Posted data:', response.data);
+
+
+    // Clear the form (if needed)
+    // setTitle('');
+    // setBody('');
+  } catch (error) {
+    // Axios error handling
+    if (error.response) {
+      // Server responded with a status outside 200-299
+      console.error('Error posting data (Server Response):', error.response.data);
+      console.error('Status:', error.response.status);
+    } else if (error.request) {
+      // Request was made but no response was received
+      console.error('Error posting data (No Response):', error.request);
+    } else {
+      // Other errors
+      console.error('Error posting data (General):', error.message);
     }
   }
+};
 
 
 
@@ -95,22 +142,27 @@ export default function Register({navigation}) {
     <View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.cardText}>Register Form</Text>
-        <TextInput
-          style={styles.input}
+        <TextInput style={styles.input}
           placeholder="username"
           onChangeText={handleUsername}
         />
         <TextInput
           style={styles.input}
           placeholder="email"
+           keyboardType="email-address"
+        autoCapitalize="none"
+          onChangeText={handleEmail}
         />
         <TextInput
           style={styles.input}
           placeholder="password"
+          secureTextEntry
+          onChangeText={handlePassword}
         />
         <TextInput
           style={styles.input}
           placeholder="phone"
+          onChangeText={handlePhone}
         />
         <Text style={styles.label}>Passport Size Photo</Text>
          {passportImage && <Image source={{ uri: passportImage }} style={styles.passportImage} />}

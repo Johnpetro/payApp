@@ -6,22 +6,36 @@ const cors = require('cors');
 app.use(cors());
 // const bodyPares =  require('body-parser');
 const bodyParser = require('body-parser');
-app.use(bodyParser.json)
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const PORT = 5000;
 const User =  require("./model/User");
 // console.log(User)
 
 
-// app.post('/app/user',(req,res)=>{
-//     const username =  req.body.user_name;
-//     res.send(username);
-//     console.log(username)
-// })
-app.post('/app/user', (req, res) => {
-    console.log('Received request:', req.body);  // Log the request body
-    const { user_name } = req.body;
-    res.json({ message: 'User name received successfully', user_name });
+app.get('/us', (req, res) => {
+  console.log('GET request to /us');
+  res.send('Hello from /us');
+});
+
+app.post('/app', async (req, res) => {
+    // console.log('Received request:', req.body);  // Log the request body
+    // console.log("app")
+    const { user_name,email,password,phone } = req.body;
+   try{
+    let user = new User({
+      username:user_name,
+      password:password,
+      email:email,
+      phone:phone
+      })
+      user = await user.save()
+      res.send(user);
+   }catch(ex){
+    console.log("eror"+ex)
+   }
+   
   });
   
 
