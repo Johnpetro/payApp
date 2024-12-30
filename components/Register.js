@@ -3,33 +3,27 @@ import { StyleSheet, View, Text,TextInput,Button,Alert ,TouchableOpacity, Image,
 import * as ImagePicker from 'expo-image-picker';
 
 
-//   // Function to pick an image from files Photos
-//   const pickImage = async () => {
-//     let result = await ImagePicker.launchImageLibraryAsync({
-//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//       allowsEditing: true,
-//       aspect: [4, 4],
-//       quality: 1,
-//     });
 
-//     if (!result.canceled) {
-//       setPassportImage(result.assets[0].uri);
-//     }
-//   };
-
-//   // Function to take image
-//   const takePhoto = async () => {
-//     let result = await ImagePicker.launchCameraAsync({
-//       allowsEditing: true,
-//       aspect: [4, 4],
-//       quality: 1,
-//     });
-
-//     if (!result.canceled) {
-//       setPassportImage(result.assets[0].uri);
-//     }
-//   };
 export default function Register({navigation}) {
+  const [username,setUsername] = useState('');
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+    const [phone,setPhone] = useState('');
+
+    const handleUsername =  (val)=>{
+      setUsername(val)
+      // Alert.alert(username)
+      // console.log(username)
+    }
+    const handlePassword =  (val)=>{
+      setPassword(val)
+    }
+    const handleEmail =  (val)=>{
+      setEmail(val)
+    }
+    const handlePhone =  (val)=>{
+      setPhone(val)
+    }
     const [passportImage, setPassportImage] = useState(null);
      // Function to pick an image from files Photos
   const pickImage = async () => {
@@ -57,6 +51,46 @@ export default function Register({navigation}) {
       setPassportImage(result.assets[0].uri);
     }
   };
+
+  const submitsDetails = async ()=>{
+    // console.log(username)
+    
+    try {
+      const response = await fetch('https:// 192.168.90.61:5000/app/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_name: username,
+        }),
+      });
+  
+      // Check if the response is ok (status code 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Parse the JSON response
+      const data = await response.json();
+  
+      console.log('Posted data:', data);
+  
+      // Clear the form (if needed)
+      setTitle('');
+      setBody('');
+    } catch (error) {
+      console.info(error)
+      console.error('Error posting data:', error);
+    }
+  }
+
+
+
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -64,6 +98,7 @@ export default function Register({navigation}) {
         <TextInput
           style={styles.input}
           placeholder="username"
+          onChangeText={handleUsername}
         />
         <TextInput
           style={styles.input}
@@ -72,6 +107,10 @@ export default function Register({navigation}) {
         <TextInput
           style={styles.input}
           placeholder="password"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="phone"
         />
         <Text style={styles.label}>Passport Size Photo</Text>
          {passportImage && <Image source={{ uri: passportImage }} style={styles.passportImage} />}
@@ -86,7 +125,7 @@ export default function Register({navigation}) {
          <Button
           title="Submit"
           style={styles.input}
-          onPress={() => Alert.alert('Button!')}
+          onPress={submitsDetails}
           color="#007BFF" // Button color
         />
         <View style={styles.signupText}>
@@ -99,6 +138,9 @@ export default function Register({navigation}) {
     </View>
   );
 }
+
+// in register
+
 
 const styles = StyleSheet.create({
     container: {
