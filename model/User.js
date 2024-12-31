@@ -19,6 +19,10 @@ phone:{
     type:Number,
     unique:true,
     require:true
+},
+amount:{
+    type:Number,
+    require:true
 }
 });
 const User =  mongoose.model('users',userSchems);

@@ -109,8 +109,11 @@ const submitsDetails = async () => {
       }
     );
 
-    // Axios automatically throws an error for HTTP status codes outside 200-299
-    console.log('Posted data:', response.data);
+    
+    if(response.status==200){
+      console.log("dsds")
+      navigation.navigate('Login')
+    }
 
 
     // Clear the form (if needed)
@@ -176,13 +179,13 @@ const submitsDetails = async () => {
          </View>       
          <Button
           title="Submit"
-          style={styles.input}
+          style={styles.signInButton}
           onPress={submitsDetails}
           color="#007BFF" // Button color
         />
         <View style={styles.signupText}>
         <Text style={styles.message}>already have an account?   </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('OTP')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.signupLink}>  login</Text>
         </TouchableOpacity>
         </View>
@@ -196,10 +199,21 @@ const submitsDetails = async () => {
 
 const styles = StyleSheet.create({
     container: {
+        // flex: 1,
+        // justifyContent: 'center', // Centers vertically
+        // alignItems: 'center', // Centers horizontally
+        // backgroundColor: '#f5f5f5',
         flex: 1,
-        justifyContent: 'center', // Centers vertically
-        alignItems: 'center', // Centers horizontally
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#1E1E1E',
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+      },
+      signInButton: {
+        backgroundColor: '#FFD700',
+        borderRadius: 8,
+        paddingVertical: 12,
+        alignItems: 'center',
+        marginTop: 10,
       },
       signupLink: {
         fontSize: 14,
@@ -216,9 +230,9 @@ const styles = StyleSheet.create({
   
       },
   card: {
-    width: '95%', // Adjust card width as needed
+    width: '100%', // Adjust card width as needed
     // height:"",
-    padding: 20 ,
+    padding: 10 ,
     backgroundColor: '#fff',
     borderRadius: 10,
     elevation: 5, // Adds shadow on Android
@@ -229,11 +243,17 @@ const styles = StyleSheet.create({
   },
 
 input: {
-    height: 40,
+    // height: 40,
     margin: 4,
-    borderWidth: 1,
+    // borderWidth: 1,
     padding: 10,
-    borderRadius:3
+    // borderRadius:3
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    height: 40,
+    fontSize: 16,
   },
   message:{
     padding:5,
@@ -265,5 +285,10 @@ input: {
     color: '#fff',
     fontSize: 14,
   },
-
+  cardText:{
+    fontSize:20,
+    fontWeight:'bold',
+    textAlign:'center',
+    padding:5
+},
 });

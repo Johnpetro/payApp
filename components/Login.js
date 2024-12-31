@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text,TextInput,Button,Alert,TouchableOpacity } from 'react-native';
 
 export default function Register({ navigation }) {
+  const [email,setEmail] =  useState('');
+  const [password,setPassword]=useState('')
+
+  const handleEmail =(val)=>{
+    setEmail(val)
+  }
+  const handlePassword =(val)=>{
+    setPassword(val)
+  }
+  const loginUser = ()=>{
+    Alert.alert(password + email)
+
+  }
+
   return (
      <View style={styles.container}>
       <View style={styles.card}>
@@ -10,16 +24,19 @@ export default function Register({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="email"
+          onChangeText={handleEmail}
         />
         <TextInput
           style={styles.input}
           placeholder="password"
+          onChangeText={handlePassword}
         />
          <Button
           title="Submit"
-          style={styles.input}
-          onPress={() => Alert.alert('Button!')}
+          style={styles.signInButton}
+          // onPress={() => Alert.alert('Button!')}
           color="#007BFF" // Button color
+          onPress={loginUser}
         />
 
         
@@ -37,10 +54,20 @@ export default function Register({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
+        // flex: 1,
+        // justifyContent: 'center', // Centers vertically
+        // alignItems: 'center', // Centers horizontally
+        // backgroundColor: '#f5f5f5',
         flex: 1,
-        justifyContent: 'center', // Centers vertically
-        alignItems: 'center', // Centers horizontally
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#1E1E1E',
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+      },
+        cardText:{
+            fontSize:20,
+            fontWeight:'bold',
+            textAlign:'center',
+            padding:5
       },
     
     signupLink: {
@@ -58,7 +85,7 @@ const styles = StyleSheet.create({
 
     },
   card: {
-    width: '90%', // Adjust card width as needed
+    width: '100%', // Adjust card width as needed
     // height:"",
     padding: 20 ,
     backgroundColor: '#fff',
@@ -72,9 +99,22 @@ const styles = StyleSheet.create({
 
 input: {
     height: 40,
-    margin: 10,
+    margin: 9,
+    // borderWidth: 1,
+    // padding: 10,
     borderWidth: 1,
-    padding: 10,
+    borderColor: '#E5E5E5',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    height: 40,
+    fontSize: 16,
+  },
+  signInButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 10,
   },
 //   message:{
 //     padding:5,

@@ -31,7 +31,7 @@ app.post('/app', async (req, res) => {
       phone:phone
       })
       user = await user.save()
-      res.send(user);
+      res.json(user);
    }catch(ex){
     console.log("eror"+ex)
    }

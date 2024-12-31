@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text,TextInput } from 'react-native';
 import Register from './components/Register';
+import Home from './components/Home';
+import Error from './components/Error';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { StyleSheet } from 'react-native';
@@ -17,7 +19,7 @@ export default function App() {
     // ...
 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Register">
+      <Stack.Navigator initialRouteName="Login">
         
         <Stack.Screen
           name="Login"
@@ -35,6 +37,16 @@ export default function App() {
           name="OTP"
           component={OTP}
           options={{ title: 'Enter OTP' }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Error"
+          component={Error}
+          options={{ title: 'Opps..' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
