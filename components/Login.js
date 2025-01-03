@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text,TextInput,Button,Alert,TouchableOpacity } from 'react-native';
 
@@ -11,10 +12,42 @@ export default function Register({ navigation }) {
   const handlePassword =(val)=>{
     setPassword(val)
   }
-  const loginUser = ()=>{
-    Alert.alert(password + email)
+  const loginUser = async ()=>{
+    try{
+    
+      const  response =  await axios.post('http://192.168.144.61:5000/login',{
+      email:email,
+      password:password
+    },{
+     headers:{
+      'Content-Type':'application/json',
+     } 
+    })
+    if(response.status==200){
+      console.log("login successifyly")
+      console.log(response.data);
+      navigation.navigate('Home')
+    }
+    // console.log(response)
 
-  }
+
+
+
+    }catch (error) {
+      // Axios error handling
+      if (error.response) {
+        // Server responded with a status outside 200-299
+        console.error('Error posting data (Server Response):', error.response.data);
+        // console.error('Status:', error.response.status); find a way to hand
+      } else if (error.request) {
+        // Request was made but no response was received
+        console.error('Error posting data (No Response):', error.request);
+      } else {
+        // Other errors
+        console.error('Error posting data (General):', error.message);
+      }
+    }
+  };
 
   return (
      <View style={styles.container}>

@@ -93,14 +93,15 @@ export default function Register({navigation}) {
   // import axios from 'axios';
 
 const submitsDetails = async () => {
-  try {
+  try { 
     const response = await axios.post(
-      'http://192.168.90.61:5000/app',
+      'http://192.168.144.61:5000/app',
       {
         user_name: username, // Payload
         phone: phone,
         password: password,
-        email: email  
+        email: email,
+        amount:10000
       },
       {
         headers: {
