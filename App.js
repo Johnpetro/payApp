@@ -3,6 +3,7 @@ import { StyleSheet, View, Text,TextInput } from 'react-native';
 import Register from './components/Register';
 import Home from './components/Home';
 import Error from './components/Error';
+import Transfer from './components/Transfer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { StyleSheet } from 'react-native';
@@ -19,7 +20,7 @@ export default function App() {
     // ...
 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Transfer">
         
         <Stack.Screen
           name="Login"
@@ -43,6 +44,11 @@ export default function App() {
           name="Home"
           component={Home}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Transfer"
+          component={Transfer}
+          options={{ title: 'Send Money..' }}
         />
         <Stack.Screen
           name="Error"

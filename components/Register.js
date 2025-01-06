@@ -11,6 +11,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 export default function Register({navigation}) {
   const [username,setUsername] = useState('');
+  
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
     const [phone,setPhone] = useState('');
@@ -21,7 +22,8 @@ export default function Register({navigation}) {
       // console.log(username)
     }
     const handlePassword =  (val)=>{
-      setPassword(val)
+           setPassword(val)
+      
     }
     const handleEmail =  (val)=>{
       setEmail(val)
@@ -57,45 +59,12 @@ export default function Register({navigation}) {
     }
   };
 
-  // const submitsDetails = async ()=>{
-  //   // console.log(username)
-    
-  //   try {
-  //     const response = await fetch('http://192.168.90.61:8080/app/user', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         user_name: username,
-  //       }),
-  //     });
-  
-  //     // Check if the response is ok (status code 200-299)
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  
-  //     // Parse the JSON response
-  //     const data = await response.json();
-  
-  //     console.log('Posted data:', data);
-  
-  //     // // Clear the form (if needed)
-  //     // setTitle('');
-  //     // setBody('');
-  //   } catch (error) {
-  //     console.info(error)
-  //     console.error('Error posting data:', error);
-  //   }
-  // }
 
-  // import axios from 'axios';
 
 const submitsDetails = async () => {
   try { 
     const response = await axios.post(
-      'http://192.168.144.61:5000/app',
+      'http://192.168.145.61:5000/app',
       {
         user_name: username, // Payload
         phone: phone,

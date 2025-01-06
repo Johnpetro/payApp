@@ -169,7 +169,7 @@
 
 // export default LoginScreen;
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, use } from 'react';
 import {
   View,
   Text,
@@ -179,9 +179,11 @@ import {
   Animated,
   FlatList,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 
-export default function MainScreen() {
+export default function MainScreen({navigation}) {
   const [isAmountVisible, setIsAmountVisible] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [news] = useState([
@@ -189,7 +191,57 @@ export default function MainScreen() {
     { id: '2', title: 'New Update: Banking App Adds More Features' },
     { id: '3', title: 'Tips: Save Money with These Simple Tricks' },
   ]);
+  const [token, setToken] = useState(null);
+  const [username,setUsername]= useState(null)
+ 
+    // Check token on screen load
+    useEffect(() => {
+      const checkToken = async () => {
+        try {
+          const token = await SecureStore.getItemAsync('userToken');
+          if (!token) {
+            // If no token, redirect to Login screen
+            navigation.navigate('Login')
+          }
+          if (token) {
+            const parsedToken = JSON.parse(token);  // Parse only if it's a string
+            console.log(parsedToken);
+            setUsername(parsedToken.username)
+            return parsedToken.amount
+          }
+          // console.log(token)
+          // return token
+        } catch (error) {
+          console.error('Error checking token:', error);
+          navigation.navigate('Login') // Redirect to Login on error
+        }
+      };
+     
+      // console.log(JSON.parse(checkToken()));
+      setToken(checkToken());
+    }, [navigation]);
+    // after obtsin the token we have to get the user information
 
+  
+  //  useEffect(() => {
+  //   const userInfo = async(token)=>{
+  //    try{
+  //     const res = await axios.get(`http://192.168.145.61:5000/userinfo/${token}`)
+  //       // {
+  //       //   myToken:token
+  //       // },
+  //       return res.data;
+      
+  //    }catch(ex){
+  //     // navigate to eroor
+  //     console.log(ex.message)
+  //     navigation.navigate('Error')
+  //    }}
+  //    setData(userInfo(token))
+    
+  //  },[token,navigation]);
+    
+  // console.log(dat)
   // Calculate greeting based on time
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -198,6 +250,7 @@ export default function MainScreen() {
     if (hour < 20) return 'Good Evening';
     return 'Good Night';
   };
+
 
   const toggleAmountVisibility = () => setIsAmountVisible(!isAmountVisible);
 
@@ -208,6 +261,8 @@ export default function MainScreen() {
     }, 2000); // 2 seconds
     return () => clearInterval(interval);
   }, [news.length]);
+
+  // console.log(JSON.parse(token))
 
   return (
     <View style={styles.container}>
@@ -220,7 +275,7 @@ export default function MainScreen() {
         />
         <View style={styles.textContainer}>
           <Text style={styles.greeting}>{getGreeting()},</Text>
-          <Text style={styles.userName}>johnpetro</Text>
+          <Text style={styles.userName}>{username}</Text>
         </View>
 
         <View style={styles.iconsContainer}>
@@ -249,7 +304,7 @@ export default function MainScreen() {
       {/* Amount Box */}
       <View style={styles.amountBox}>
         {isAmountVisible ? (
-          <Text style={styles.amountText}>0.00</Text>
+          <Text style={styles.amountText}>{token}</Text>
         ) : (
           <Text style={styles.placeholderText}>**</Text>
         )}

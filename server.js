@@ -1,5 +1,7 @@
 const mongoose =  require('mongoose');
 const express =  require('express')
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const app = express()
 
 const cors = require('cors');
@@ -12,6 +14,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = 5000;
 const User =  require("./model/User");
 // console.log(User)
+
+// Configure Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // or any email service you use
+  auth: {
+    user: 'johnpetro335@gmail.com',
+    pass: 'pbjh ttup hxxk lhuz', // Make sure to use an app password if you're using Gmail
+  },
+});
+
+
+
 
 
 app.get('/us', (req, res) => {
@@ -45,24 +59,47 @@ app.post('/app', async (req, res) => {
   // handlle logins
 app.post('/login', async(req,res)=>{
   const {email,password}=req.body
-  if(email==""&&password=="")res.status(401).json("do not enter null value")
-  console.log(password)
+  if(email==""&&password=="")return res.status(401).json("do not enter null value")
   try{
     let result =  await User.find({email:email});
     if(!result)return res.status(401).json("Bad Request")
     const pass = result[0].password;
     if(pass==password){
-      res.status(200).json(result)//main return here
+    // return  res.status(200).json(result)//main return here
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+    // Send OTP email
+    const mailOptions = {
+      from: 'johnpetro335@gmail,com',
+      to: email,
+      subject: 'Your OTP Code',
+      text: `Your OTP code is: ${otp}`,
+    };
+
+    transporter.sendMail(mailOptions, async (error, info) => {
+      if (error) {
+        return res.status(500).json('Error sending OTP: ' + error);
+      } else {
+        return  res.status(200).json({"result":result,"otp":otp})//main return here
+      }
+    });
     }else{
-      res.status(400).json("Incorrect Credential")
+     return  res.status(400).json("Incorrect Credential")
     }
     // res.status(200).json(result[0].)
 
   }catch(e){
-    res.status(500).send("Intenal server error")
+   return  res.status(500).send("Incorrect email or password")
 
   }
    
+})
+
+app.get('/userinfo/:token',(req,res)=>{
+  let token =  req.params.token;
+  // console.log(token)
+  res.json({token})
+
 })
   
 
