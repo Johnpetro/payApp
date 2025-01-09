@@ -95,11 +95,23 @@ app.post('/login', async(req,res)=>{
    
 })
 
-app.get('/userinfo/:token',(req,res)=>{
-  let token =  req.params.token;
-  // console.log(token)
-  res.json({token})
+app.get('/user/:phone',async(req,res)=>{
+  // console.log('GET request to /us'+ req.params.phone);
+  // res.send('Hello from /us');
+  try{
+ 
+ 
+    const phone =  req.params.phone;
 
+    let user =  await User.find({phone:phone})
+    if(!user)return res.status(400).json({"error":"User with such number not found"})
+     return res.status(200).json(user)
+    
+    console.log(user)
+
+  }catch(ex){
+     res.status(500).json({"error":"Intenal server Error."})
+  }
 })
   
 

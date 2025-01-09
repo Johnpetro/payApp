@@ -4,11 +4,13 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Error from './components/Error';
 import Transfer from './components/Transfer';
+import SearchRec from './components/SearchRec';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 // import { StyleSheet } from 'react-native';
 import Login from './components/Login';
 import OTP  from './components/OTP'
+
 // import RegisterScreen from './components/Register';
 const Stack = createStackNavigator();
 export default function App() {
@@ -20,7 +22,7 @@ export default function App() {
     // ...
 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Transfer">
+      <Stack.Navigator initialRouteName="SearchRec">
         
         <Stack.Screen
           name="Login"
@@ -38,7 +40,7 @@ export default function App() {
         <Stack.Screen
           name="OTP"
           component={OTP}
-          options={{ title: 'Enter OTP' }}
+          options={{ title: 'Enter OTP', headerShown:true }}
         />
         <Stack.Screen
           name="Home"
@@ -49,6 +51,11 @@ export default function App() {
           name="Transfer"
           component={Transfer}
           options={{ title: 'Send Money..' }}
+        />
+        <Stack.Screen
+          name="SearchRec"
+          component={SearchRec}
+          options={{ title: 'Rudi' }}
         />
         <Stack.Screen
           name="Error"

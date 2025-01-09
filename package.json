@@ -24,6 +24,7 @@
     "expo-secure-store": "^14.0.0",
     "expo-status-bar": "~2.0.0",
     "express": "^4.21.2",
+    "gradlew": "^0.0.1-security",
     "mongoose": "^8.9.2",
     "nodemailer": "^6.9.16",
     "nodemon": "^3.1.9",

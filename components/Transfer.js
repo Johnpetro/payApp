@@ -1,7 +1,42 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import axios from 'axios';
+export default function Transfer({route}) {
+  const [phone, setPhone] = useState('');
+  const [searchResults, setSearchResults] = useState([]); // Store results if needed
+  const [id, setId] =  useState(null)
+  const [username,setUsername]= useState('')
+  const [amount,setAmount]=useState('');
+  const [myphone,setMyphone]= useState('')
+  const[myId, setMyId] =  useState('')
+  const handleAmount = (val)=>{
+    setAmount(val)
+    
+  }
+  const senderInfo =async ()=>{
+    const token = await SecureStore.getItemAsync('userToken');
+    console.log("jkjkkjkj")
+ }
+  useEffect(() => {
+    
+   
+    senderInfo()
+  const { user } = route.params;
+  console.log(user[0].email)
+  setPhone(user[0].phone)
+  setUsername(user[0].username)
+  setId(user[0]._id)
 
-export default function Transfer () {
+
+ 
+  },[])
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -12,55 +47,46 @@ export default function Transfer () {
       {/* Recipient Info */}
       <View style={styles.recipientInfo}>
         <Text style={styles.recipientText}>
-          Hamisha kwenda <Text style={styles.recipientNumber}>2556XXXXX</Text> 
-          {' '}(<Text style={styles.recipientName}>NAOMI NICHOLAUS LEMA</Text>)
+          Hamisha kwenda <Text style={styles.recipientNumber}>{phone}</Text>{' '}
+          (<Text style={styles.recipientName}>{username}</Text>)
         </Text>
       </View>
 
-      {/* Save Number */}
+      {/* Input Fields */}
       <View style={styles.saveNumber}>
-        <TextInput
-          placeholder="namba ya simu"
-          style={styles.input}
-        />
-
-        <TextInput
-          placeholder="Kiasi"
-          style={styles.input}
-        />
+        <TextInput placeholder="Kiasi" style={styles.input} onChangeText={handleAmount} />
       </View>
-
-     
-     
-      {/* Continue Button */}
       <TouchableOpacity style={styles.continueButton}>
         <Text style={styles.continueText}>ENDELEA</Text>
       </TouchableOpacity>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
   },
   header: {
-    marginTop: 20,
+    padding: 15,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
     marginBottom: 10,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
+    color: '#000',
   },
   recipientInfo: {
-    marginVertical: 20,
+    padding: 10,
+    marginBottom: 15,
   },
   recipientText: {
     fontSize: 16,
-    textAlign: 'center',
+    color: '#000',
   },
   recipientNumber: {
     fontWeight: 'bold',
@@ -69,55 +95,41 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   saveNumber: {
-    marginVertical: 20,
+    marginBottom: 20,
   },
   input: {
+    height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  searchResults: {
+    marginBottom: 15,
+    backgroundColor: '#f9f9f9',
     padding: 10,
-    fontSize: 16,
+    borderRadius: 5,
   },
-  amountSection: {
-    marginVertical: 20,
-  },
-  amountTitle: {
-    fontSize: 16,
+  resultsHeader: {
     fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#000',
   },
-  amountError: {
-    color: 'red',
-    marginVertical: 5,
-  },
-  amountOptions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  amountButton: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
-    padding: 10,
-    marginVertical: 5,
-    width: '30%',
-    alignItems: 'center',
-  },
-  amountText: {
+  resultItem: {
     fontSize: 14,
-    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 3,
   },
   continueButton: {
-    backgroundColor: '#007BFF',
-    borderRadius: 8,
-    padding: 15,
-    marginVertical: 20,
+    backgroundColor: '#007bff',
+    paddingVertical: 15,
+    borderRadius: 5,
     alignItems: 'center',
   },
   continueText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
-
-

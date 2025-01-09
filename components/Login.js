@@ -205,7 +205,7 @@ export default function Register({ navigation }) {
   const loginUser = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.145.61:5000/login',
+        'http://192.168.223.61:5000/login',
         {
           email: email,
           password: password,
