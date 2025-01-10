@@ -6,8 +6,11 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert
 } from 'react-native';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Transfer({route}) {
   const [phone, setPhone] = useState('');
   const [searchResults, setSearchResults] = useState([]); // Store results if needed
@@ -20,16 +23,32 @@ export default function Transfer({route}) {
     setAmount(val)
     
   }
-  const senderInfo =async ()=>{
-    const token = await SecureStore.getItemAsync('userToken');
-    console.log("jkjkkjkj")
- }
+
+
+ 
+
+
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const Id_string = await AsyncStorage.getItem('@storage_Key');
+       
+            const Id_ = JSON.parse(Id_string)
+            
+            
+        if (Id_._id !== null) {
+          setMyId(Id_._id)
+          console.log("dsdsdsdsd"+Id_._id);
+          console.log("only Id....."+myId)
+        }
+      } catch (e) {
+        console.error(e);
+      }}
+      
     
-   
-    senderInfo()
+   getData()
+    // console.log(senderInfo())
   const { user } = route.params;
-  console.log(user[0].email)
   setPhone(user[0].phone)
   setUsername(user[0].username)
   setId(user[0]._id)
@@ -37,6 +56,54 @@ export default function Transfer({route}) {
 
  
   },[])
+  // const Transfer = ()=>{
+  //   Alert.alert("data posted......")
+  // }
+
+ const Transfer  = async () => {
+  console.log(phone)
+  console.log(myId)
+  console.log(amount)
+    try {
+      const response = await axios.post(
+        'http://192.168.223.61:5000/transfer',
+        {
+          amount: amount,
+          phone: phone,
+          myId:myId
+
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log('Transfer successifuly');
+
+      }
+
+    } catch (error) {
+      if (error.response) {
+        // Server responded with an error
+        console.error('Error (Server):', error.response.data);
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('Error (Request):', error.request);
+      } else {
+        // Other errors
+        console.error('Error (General):', error.message);
+        Alert.alert('Transfer Failed', 'Something went wrong. Please try again.');
+      }
+    }
+  };
+
+
+
+
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -57,7 +124,7 @@ export default function Transfer({route}) {
         <TextInput placeholder="Kiasi" style={styles.input} onChangeText={handleAmount} />
       </View>
       <TouchableOpacity style={styles.continueButton}>
-        <Text style={styles.continueText}>ENDELEA</Text>
+        <Text style={styles.continueText} onPress={Transfer}>ENDELEA</Text>
       </TouchableOpacity>
     </ScrollView>
   );

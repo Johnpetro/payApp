@@ -22,7 +22,7 @@ export default function App() {
     // ...
 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SearchRec">
+      <Stack.Navigator initialRouteName="Login">
         
         <Stack.Screen
           name="Login"
@@ -47,16 +47,17 @@ export default function App() {
           component={Home}
           options={{ headerShown: false }}
         />
+         <Stack.Screen
+          name="SearchRec"
+          component={SearchRec}
+          options={{ title: 'Rudi' }}
+        />
         <Stack.Screen
           name="Transfer"
           component={Transfer}
           options={{ title: 'Send Money..' }}
         />
-        <Stack.Screen
-          name="SearchRec"
-          component={SearchRec}
-          options={{ title: 'Rudi' }}
-        />
+       
         <Stack.Screen
           name="Error"
           component={Error}

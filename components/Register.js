@@ -64,7 +64,7 @@ export default function Register({navigation}) {
 const submitsDetails = async () => {
   try { 
     const response = await axios.post(
-      'http://192.168.223.61:5000/app',
+      'http://172.105.153.163:5000/app',
       {
         user_name: username, // Payload
         phone: phone,
@@ -155,7 +155,7 @@ const submitsDetails = async () => {
         />
         <View style={styles.signupText}>
         <Text style={styles.message}>already have an account?   </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity x>
           <Text style={styles.signupLink}>  login</Text>
         </TouchableOpacity>
         </View>

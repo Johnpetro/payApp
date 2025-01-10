@@ -3,22 +3,6 @@ import React , {useEffect, useState} from 'react';
 import { StyleSheet, View, Text,TextInput,Button,Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 // const [username,setUsername]= useState(null)
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
 export default function OTPForm({navigation}) {
   // OTP CODE
   const [otp, setOtp] = useState(null);

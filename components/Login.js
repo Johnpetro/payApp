@@ -168,6 +168,7 @@
 
 import axios from 'axios';
 import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StyleSheet,
   View,
@@ -196,11 +197,26 @@ export default function Register({ navigation }) {
       const tokenString = typeof token === 'string' ? token : JSON.stringify(token.result[0]);
       await SecureStore.setItemAsync('userToken', tokenString);
       await SecureStore.setItemAsync('userOTP', token.otp);
+      await AsyncStorage.setItem('@storage_Key', tokenString);
       console.log('Token saved:', tokenString);
     } catch (error) {
       console.error('Error saving token:', error);
     }
   };
+
+  // /////get only id 
+  // const storeData = async (value) => {
+  //   try {
+   
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
+
+
+
+
+  // 
 
   const loginUser = async () => {
     try {

@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 // import { red } from 'react-native-reanimated/lib/typescript/Colors';
 export default function SearchRec({navigation}) {
   const [phone, setPhone] = useState(null);

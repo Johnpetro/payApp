@@ -113,6 +113,34 @@ app.get('/user/:phone',async(req,res)=>{
      res.status(500).json({"error":"Intenal server Error."})
   }
 })
+
+app.post('/transfer',async(req,res)=>{
+  const {myId,phone,amount} = req.body;
+  try{
+    let user =  await User.find({_id:myId})
+    if(!user)return res.status(400).json({"error":"User with such number not found"})
+    //  console.log(user)
+   
+    if(user[0].amount>amount){
+    let amountSum = user[0].amount-amount;
+    console.log(amountSum)
+    let data =  await User.findByIdAndUpdate(myId,{amount:amountSum},{new:true})
+    console.log(data)
+    if(data){
+       user =  await User.find({phone:phone})
+       amountTotal = user[0].amount+amount
+       let result =  await User.findByIdAndUpdate(user[0]._id,{amount:amountTotal},{new:true})
+       console.log(result)
+    }
+  }else{
+    res.status(400).json({"message":"No enought balance."})
+  }
+
+  }catch(ex){
+     res.status(500).json({"error":"Intenal server Error."})
+  }
+  
+})
   
 
 const  connectDB =  async ()=>{

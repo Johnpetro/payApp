@@ -170,6 +170,8 @@
 // export default LoginScreen;
 
 import React, { useState, useEffect, useRef, use } from 'react';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Text,
@@ -179,8 +181,8 @@ import {
   Animated,
   FlatList,
 } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
 export default function MainScreen({navigation}) {
@@ -199,6 +201,9 @@ export default function MainScreen({navigation}) {
       const checkToken = async () => {
         try {
           const token = await SecureStore.getItemAsync('userToken');
+          const Id_string = await AsyncStorage.getItem('@storage_Key');
+          const Id_ = JSON.parse(Id_string)
+          console.log("only Id....."+Id_._id)
           if (!token) {
             // If no token, redirect to Login screen
             navigation.navigate('Login')
@@ -332,7 +337,7 @@ export default function MainScreen({navigation}) {
           <Text style={styles.bottomTabText}>Statements</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomTab}>
-          <Ionicons name="send-outline" size={24} color="#007bff" />
+          <Ionicons name="send-outline" size={24} color="#007bff" onPress={() => navigation.navigate('SearchRec')} />
           <Text style={styles.bottomTabText}>Send</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomTab}>
