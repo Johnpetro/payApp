@@ -221,7 +221,7 @@ export default function Register({ navigation }) {
   const loginUser = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.223.61:5000/login',
+        'http://51.20.248.109:5000/login',
         {
           email: email,
           password: password,
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1E1E1E',
-    paddingHorizontal: 20,
+    paddingHorizontal: 8,
     justifyContent: 'center',
   },
   card: {

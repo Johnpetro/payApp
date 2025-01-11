@@ -24,7 +24,7 @@ export default function SearchRec({navigation}) {
 
     try { 
       const response = await axios.get(
-          `http://192.168.223.61:5000/user/${phone}`
+          `http://51.20.248.109:5000/user/${phone}`
         );
 
     // if(response.status==400) return console.log("non")

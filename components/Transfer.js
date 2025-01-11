@@ -1,4 +1,6 @@
 import React, { useState,useEffect } from 'react';
+import * as LocalAuthentication from 'expo-local-authentication';
+
 import {
   ScrollView,
   View,
@@ -11,6 +13,7 @@ import {
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import * as LocalAuthentication from 'expo-local-authentication';
 export default function Transfer({route}) {
   const [phone, setPhone] = useState('');
   const [searchResults, setSearchResults] = useState([]); // Store results if needed
@@ -56,49 +59,86 @@ export default function Transfer({route}) {
 
  
   },[])
-  // const Transfer = ()=>{
-  //   Alert.alert("data posted......")
-  // }
+ 
 
- const Transfer  = async () => {
-  console.log(phone)
-  console.log(myId)
-  console.log(amount)
-    try {
-      const response = await axios.post(
-        'http://192.168.223.61:5000/transfer',
-        {
-          amount: amount,
-          phone: phone,
-          myId:myId
 
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log('Transfer successifuly');
-
-      }
-
-    } catch (error) {
-      if (error.response) {
-        // Server responded with an error
-        console.error('Error (Server):', error.response.data);
-      } else if (error.request) {
-        // Request was made but no response received
-        console.error('Error (Request):', error.request);
-      } else {
-        // Other errors
-        console.error('Error (General):', error.message);
-        Alert.alert('Transfer Failed', 'Something went wrong. Please try again.');
-      }
+const authenticateUser = async () => {
+  try {
+    // Check if hardware supports biometrics
+    const isHardwareAvailable = await LocalAuthentication.hasHardwareAsync();
+    if (!isHardwareAvailable) {
+      Alert.alert('Error', 'Biometric authentication is not supported on this device.');
+      return false;
     }
-  };
+
+    // Check if any biometric data is enrolled
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+    if (!isEnrolled) {
+      Alert.alert('Error', 'No biometric data enrolled. Please set up biometrics.');
+      return false;
+    }
+
+    // Prompt user for authentication
+    const authResult = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Authenticate to proceed with the transfer',
+      fallbackLabel: 'Use passcode',
+    });
+
+    if (authResult.success) {
+      return true; // Authentication successful
+    } else {
+      Alert.alert('Authentication Failed', 'Unable to verify your identity.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Authentication error:', error);
+    Alert.alert('Error', 'An error occurred during authentication.');
+    return false;
+  }
+};
+
+const Transfer = async () => {
+  console.log(phone);
+  console.log(myId);
+  console.log(amount);
+
+  const isAuthenticated = await authenticateUser();
+  if (!isAuthenticated) {
+    return; // Stop if authentication fails
+  }
+
+  try {
+    const response = await axios.post(
+      'http://51.20.248.109:5000/transfer',
+      {
+        amount: amount,
+        phone: phone,
+        myId: myId,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log('Transfer successful');
+    }
+  } catch (error) {
+    if (error.response) {
+      // Server responded with an error
+      console.error('Error (Server):', error.response.data);
+    } else if (error.request) {
+      // Request was made but no response received
+      console.error('Error (Request):', error.request);
+    } else {
+      // Other errors
+      console.error('Error (General):', error.message);
+    }
+    Alert.alert('Transfer Failed', 'Something went wrong. Please try again.');
+  }
+};
 
 
 

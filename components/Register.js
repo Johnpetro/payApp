@@ -1,7 +1,8 @@
-import React,{ useState } from 'react';
+import React,{ useEffect, useState } from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Text,TextInput,Button,Alert ,TouchableOpacity, Image,ScrollView,} from 'react-native';
+import { StyleSheet, View, Text,TextInput,Button,Alert,ActivityIndicator ,TouchableOpacity, Image,ScrollView,} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+
 // const cors = require('cors');
 // app.use(cors());
 
@@ -10,11 +11,15 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 export default function Register({navigation}) {
+  const [loading, setLoading] = useState(false); 
   const [username,setUsername] = useState('');
-  
+  const [usermessage,setUsermessage] =useState('')  
     const [email,setEmail] = useState('');
+    const [emailmessage,setMailmessage]= useState('')
     const [password,setPassword] = useState('');
+    const [passwordMessage,setPasswordmessage]=useState()
     const [phone,setPhone] = useState('');
+    const [phoneMessage,setPhonemessage]= useState('')
 
     const handleUsername =  (val)=>{
       setUsername(val)
@@ -45,7 +50,7 @@ export default function Register({navigation}) {
       setPassportImage(result.assets[0].uri);
     }
   };
-
+ 
   // Function to take image
   const takePhoto = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -62,9 +67,19 @@ export default function Register({navigation}) {
 
 
 const submitsDetails = async () => {
+
+  if(username=="" || password==" "|| phone ==" "||email==" "){
+  if(!username)setUsermessage("Username not is empty")
+  if(!emailmessage)setMailmessage("email not is empty")
+  if(!phoneMessage)setPhonemessage("phone not is empty")
+   if(!passwordMessage)setPasswordmessage("passord not is empty")
+    
+    // if(!username)setUsermessage("User name not is empty")
+
+}else{}
   try { 
     const response = await axios.post(
-      'http://172.105.153.163:5000/app',
+      'http://51.20.248.109/:5000/app',
       {
         user_name: username, // Payload
         phone: phone,
@@ -105,6 +120,10 @@ const submitsDetails = async () => {
   }
 };
 
+useEffect(()=>{
+  setLoading(true);
+})
+
 
 
 
@@ -119,6 +138,7 @@ const submitsDetails = async () => {
           placeholder="username"
           onChangeText={handleUsername}
         />
+        <Text style={styles.tmessage}>{usermessage}</Text>
         <TextInput
           style={styles.input}
           placeholder="email"
@@ -126,17 +146,20 @@ const submitsDetails = async () => {
         autoCapitalize="none"
           onChangeText={handleEmail}
         />
+        <Text  style={styles.tmessage}>{emailmessage}</Text>
         <TextInput
           style={styles.input}
           placeholder="password"
           secureTextEntry
           onChangeText={handlePassword}
         />
+        <Text  style={styles.tmessage}>{passwordMessage}</Text>
         <TextInput
           style={styles.input}
           placeholder="phone"
           onChangeText={handlePhone}
         />
+        <Text  style={styles.tmessage}>{phoneMessage}</Text>
         <Text style={styles.label}>Passport Size Photo</Text>
          {passportImage && <Image source={{ uri: passportImage }} style={styles.passportImage} />}
          <View style={styles.buttonRow}>
@@ -155,11 +178,16 @@ const submitsDetails = async () => {
         />
         <View style={styles.signupText}>
         <Text style={styles.message}>already have an account?   </Text>
-        <TouchableOpacity x>
+        <TouchableOpacity  onPress={()=>navigation.navigate('Login')}>
           <Text style={styles.signupLink}>  login</Text>
         </TouchableOpacity>
         </View>
       </View>
+      {loading ? (
+        <ActivityIndicator style={styles.load} size="large" color="#0000ff" />
+      ) : (
+        <Button title="Register"  />
+      )}
     </View>
   );
 }
@@ -175,8 +203,24 @@ const styles = StyleSheet.create({
         // backgroundColor: '#f5f5f5',
         flex: 1,
         backgroundColor: '#1E1E1E',
-        paddingHorizontal: 20,
+        paddingHorizontal: 8,
         justifyContent: 'center',
+      },
+      load:{
+        position:"absolute",
+        top:400,
+        left:150,
+        width:100,
+        
+      },
+      tmessage: {
+        // position:'absolute',
+        // top:52,
+        // left:11,
+        fontFamily:'san',
+        fontWeight:"bold",
+        paddingLeft:12,
+        color:'#FF0000'
       },
       signInButton: {
         backgroundColor: '#FFD700',
